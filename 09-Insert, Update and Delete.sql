@@ -69,18 +69,19 @@ where brutto > 200;
 
 select *
 from [SalesLT].[Product];
-
+go
 
 merge into [dbo].[Products] as T
 using [SalesLT].[Product] as S
 on T.Name = S.Name
 when not matched by target then
-	insert (Name, Brutto) Values (S.Name, S.ListPrice)
+	insert (Name, Brutto)
+	values (S.Name, S.ListPrice)
 when matched then
-	update set T.Brutto = ListPrice*1.23
+	update set T.Brutto = S.ListPrice*1.23
 when not matched by source then
 	delete
-output $action, deleted.*, inserted.*
-;
+output $action, deleted.*, inserted.*;
+
 
 
